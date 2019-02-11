@@ -18,29 +18,48 @@ namespace BibliotecaJM
             InitializeComponent();
         }
 
-        private void FM_Principal_Load(object sender, EventArgs e)
+       
+        private void FM_Principal_Shown(object sender, EventArgs e)
         {
             usuarioActual.Nombre = "admin";
             usuarioActual.TipoUsuario = "A";
+            FM_Login f1 = new FM_Login();
+            f1.ShowDialog();
+            if (f1.usuarioActual == null)
+                this.Close();
+            this.usuarioActual = f1.usuarioActual;
         }
+
         private void tsbLectores_Click(object sender, EventArgs e)
         {
-            VisualizarFormularioYTítulo(new FM_Lectores(usuarioActual),"Mantenimiento lectores");
+            if (usuarioActual.TipoUsuario == "A" || usuarioActual.TipoUsuario == "O")
+                VisualizarFormularioYTítulo(new FM_Lectores(usuarioActual), "Mantenimiento lectores");
+            else
+                MessageBox.Show("Usuario no permitido");
         }
 
         private void tsbLibros_Click(object sender, EventArgs e)
         {
-            VisualizarFormularioYTítulo(new FM_Libros(usuarioActual), "Mantenimiento libros");
+            if (usuarioActual.TipoUsuario == "A" || usuarioActual.TipoUsuario == "O")
+                VisualizarFormularioYTítulo(new FM_Libros(usuarioActual), "Mantenimiento libros");
+            else
+                MessageBox.Show("Usuario no permitido");
         }
 
         private void tsbPréstamos_Click(object sender, EventArgs e)
         {
-            VisualizarFormularioYTítulo(new FM_Prestamos(usuarioActual), "Préstamos");
+            if (usuarioActual.TipoUsuario == "A" || usuarioActual.TipoUsuario == "O")
+                VisualizarFormularioYTítulo(new FM_Prestamos(usuarioActual), "Préstamos");
+             else
+                MessageBox.Show("Usuario no permitido");
         }
 
         private void tsbDevoluciones_Click(object sender, EventArgs e)
         {
-            VisualizarFormularioYTítulo(new FM_Devoluciones(usuarioActual), "Devoluciones");
+            if (usuarioActual.TipoUsuario == "A" || usuarioActual.TipoUsuario == "O")
+                VisualizarFormularioYTítulo(new FM_Devoluciones(usuarioActual), "Devoluciones");
+            else
+                MessageBox.Show("Usuario no permitido");
         }
 
         private void tsbListados_Click(object sender, EventArgs e)
@@ -55,7 +74,10 @@ namespace BibliotecaJM
 
         private void tsbConfiguración_Click(object sender, EventArgs e)
         {
+            if (usuarioActual.TipoUsuario == "A")
             VisualizarFormularioYTítulo(new FM_Configuracion(usuarioActual), "Configuración");
+            else
+                MessageBox.Show("Usuario no permitido");
         }
         private void VisualizarFormularioYTítulo(Form formulario, string título)
         {
@@ -72,5 +94,7 @@ namespace BibliotecaJM
             foreach (ToolStripButton boton in toolStrip1.Items)
                 boton.CheckState = CheckState.Unchecked;
         }
+
+     
     }
 }
